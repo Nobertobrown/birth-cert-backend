@@ -1,5 +1,4 @@
-const fs = require("fs");
-const pdfParse = require("pdf-parse");
+const {PDFParse} = require("pdf-parse");
 
 /**
  * Extracts the certificate ID embedded in the PDF text, written there
@@ -10,8 +9,8 @@ const pdfParse = require("pdf-parse");
  * identify which certificate is being claimed).
  */
 async function extractCertId(filePath) {
-  const buffer = fs.readFileSync(filePath);
-  const data = await pdfParse(buffer);
+  const parser = new PDFParse({url: filePath});
+  const data = await parser.getText();
 
   const match = data.text.match(/Certificate ID:\s*([a-f0-9-]{36})/i);
   if (!match) {
